@@ -16,9 +16,6 @@
     "express-session": "^1.17.1",
     "helmet": "^4.1.1",
     "mongoose": "^5.10.10"
-  },
-  "engines": {
-        "node": "10.x"
-
   }
+ 
 }
