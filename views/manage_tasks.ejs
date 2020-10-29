@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Tasks</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <header>
+        <nav class="container">
+            <div class="logo">Project Management</div>
+            <ul>
+                <li><a href="/logout">Logout</a></li>
+                <li><a href="/manager">
+                        Go back</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+    <h1>Employed Tasks</h1>
+
+    <div class="task-container">
+        <% data.forEach(detail => { %>
+        <div class="submitted">
+            <form action="/task/delete" method="post">
+                <p>Task : <b> <%= detail.task.task_name %> </b> </p>
+                <p style="margin: 0.5rem 0;">Given to <b> <%= detail.employee.name %></b> </p>
+                <p>Employees say : <%= detail.note %> </p>
+                <div>
+                    <button type="submit" data-item="<%= JSON.stringify(detail) %>" class="btn"
+                        style="background-color: maroon;"> Delete </button>
+                </div>
+            </form>
+        </div>
+
+
+
+        <% }) %>
+    </div>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+        let task_submit = document.querySelectorAll('.btn')
+        function senddata(payload) {
+            axios.post('/manager/task/delete', payload).then(function (response) {
+                console.log(response);
+                alert('Task deleted')
+                window.location.reload()
+            })
+                .catch(function (error) {
+                    console.log(error);
+                })
+        }
+
+        task_submit.forEach(task => {
+            task.addEventListener('click', (e) => {
+                e.preventDefault()
+                // console.log(JSON.parse(task.dataset.item))
+                const payload = {
+                    task: JSON.parse(task.dataset.item)
+                }
+                console.log(payload)
+
+
+                //  console.log(payload)
+                senddata(payload)
+
+            })
+        })
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manager</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <header>
+        <nav class="container">
+            <div class="logo">Project Management</div>
+            <ul>
+                <li><a href="/logout">Logout</a></li>
+                <li><a href="/manager/all/tasks">Tasks</a></li>
+            </ul>
+        </nav>
+    </header>
+    <section>
+        <h1 style="text-align: center;">Manager</h1>
+        <div class="form-container">
+            <div>
+                <form action="/manager/addtask" method="POST">
+                    <div>
+                        <label for="task_name">Task name</label>
+                        <input type="text" name="task_name" id="task_name">
+                    </div>
+
+                    <div>
+                        <label for="select_user"> select user </label>
+                        <select name="given_to" id="select_user">
+                            <% users.forEach(user => { %>
+                            <option value="<%= user._id %>"><%= user.name %> </option>
+
+                            <% }) %>
+
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="">Timeline</label>
+                        <input type="datetime-local" name="" id="">
+                    </div>
+                    <button type="submit">Add task</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <header>
+        <nav class="container">
+            <div class="logo">Project Management</div>
+            <ul>
+                <li><a href="/logout">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+    <h1>Your tasks</h1>
+    <div class="tasks">
+        <% tasks.forEach(task => { %>
+        <div class="task">
+            <form action="/submit" method="post">
+                <div style="margin : 0.8rem 0">
+                    <p>complete before : 22-10-2020 10:56 pm</p>
+                </div>
+                <div style="margin-bottom: 0.5rem;">
+                    <p>Task name : <b><%= task.task_name %></b></p>
+                </div>
+                <div>
+                    <label for=""> Note to Manager </label><br>
+                    <textarea placeholder="Its being done" cols="60" rows="5" name="note" id="note"></textarea>
+                </div>
+                <div style="display: flex;justify-content: space-between;align-items: center;">
+                    <button type="submit" class="btn" data-item="<%= JSON.stringify(task) %>">Submit task</button>
+                </div>
+
+            </form>
+        </div>
+
+        <% }) %>
+
+
+
+
+    </div>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+        let note = document.querySelector('#note');
+        let task_submit = document.querySelectorAll('.btn')
+        console.log(task_submit)
+        // let data_id = JSON.parse(document.querySelector('.data_id').textContent)
+        function senddata(payload) {
+            axios.post('/submit', payload).then(function (response) {
+                console.log(response);
+                alert('Task submission done')
+                note.value = ""
+            })
+                .catch(function (error) {
+                    console.log(error);
+                })
+        }
+
+        task_submit.forEach(task => {
+            task.addEventListener('click', (e) => {
+                e.preventDefault()
+                const payload = {
+                    note: note.value,
+                    task: JSON.parse(task.dataset.item)
+                }
+                console.log(payload)
+                senddata(payload)
+
+            })
+        })
+
+
+
+    </script>
+</body>
+
+</html>
