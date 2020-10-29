@@ -13,10 +13,10 @@ const checkAuth = (req, res, next) => {
 router.get("/", (req, res) => {
   res.send(
     `
-
+<div style ="font-size : 3rem;">
 <a href="/login">Login</a>
 <a href="/register">Register</a>
-
+</div>
 `
   );
 });
@@ -46,6 +46,9 @@ router.post("/login", (req, res) => {
   User.findOne(
     { name: req.body.name, password: req.body.password },
     (err, user) => {
+      console.log("user details");
+      console.log(user);
+      if (user == null) res.send("user does not exist");
       if (user) {
         req.session.userId = user._id;
         req.session.role = user.role;
@@ -64,7 +67,7 @@ router.post("/login", (req, res) => {
 router.get("/employee", checkAuth, (req, res) => {
   Task.find({ given_to: req.session.userId }, (err, tasks) => {
     if (tasks) {
-      console.log(tasks);
+      // console.log(tasks);
 
       res.render("employee", { tasks });
     }
@@ -72,15 +75,16 @@ router.get("/employee", checkAuth, (req, res) => {
 });
 
 router.post("/submit", checkAuth, (req, res) => {
-  const task = new Task_tracer({
+  console.log(req.body);
+  const task_trace = new Task_tracer({
     task: req.body.task._id,
     employee: req.session.userId,
     note: req.body.note,
   });
-  task
+  task_trace
     .save()
     .then((data) => {
-      res.send("placed order successfully");
+      res.send("task submitted successfully");
     })
     .catch((error) => console.log(error));
 });

@@ -38,7 +38,7 @@ router.get("/all/tasks", checkAuth, (req, res) => {
     .populate("task")
     .populate("employee")
     .then((data) => {
-      console.log(data);
+      // console.log(data);
       res.render("manage_tasks", { data });
     });
 });

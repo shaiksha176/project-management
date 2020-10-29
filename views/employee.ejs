@@ -21,7 +21,7 @@
     <div class="tasks">
         <% tasks.forEach(task => { %>
         <div class="task">
-            <form action="/submit" method="post">
+            <form action="/submit" method="post" onsubmit="submitFunc(event)">
                 <div style="margin : 0.8rem 0">
                     <p>complete before : 22-10-2020 10:56 pm</p>
                 </div>
@@ -30,7 +30,8 @@
                 </div>
                 <div>
                     <label for=""> Note to Manager </label><br>
-                    <textarea placeholder="Its being done" cols="60" rows="5" name="note" id="note"></textarea>
+                    <textarea placeholder="Its being done" cols="60" rows="5" name="note" class="note"
+                        onchange="noteFunc(event)"></textarea>
                 </div>
                 <div style="display: flex;justify-content: space-between;align-items: center;">
                     <button type="submit" class="btn" data-item="<%= JSON.stringify(task) %>">Submit task</button>
@@ -47,34 +48,33 @@
     </div>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script>
-        let note = document.querySelector('#note');
+        var note;
         let task_submit = document.querySelectorAll('.btn')
-        console.log(task_submit)
-        // let data_id = JSON.parse(document.querySelector('.data_id').textContent)
+
         function senddata(payload) {
             axios.post('/submit', payload).then(function (response) {
                 console.log(response);
                 alert('Task submission done')
-                note.value = ""
+
             })
                 .catch(function (error) {
                     console.log(error);
                 })
         }
 
-        task_submit.forEach(task => {
-            task.addEventListener('click', (e) => {
-                e.preventDefault()
-                const payload = {
-                    note: note.value,
-                    task: JSON.parse(task.dataset.item)
-                }
-                console.log(payload)
-                senddata(payload)
 
-            })
-        })
+        function noteFunc(event) {
+            note = event.target.value;
+        }
 
+        function submitFunc(event) {
+            event.preventDefault()
+            const payload = {
+                note: note,
+                task: JSON.parse(event.target.children[3].children[0].dataset.item)
+            }
+            senddata(payload)
+        }
 
 
     </script>
